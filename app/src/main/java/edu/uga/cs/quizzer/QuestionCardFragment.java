@@ -23,6 +23,11 @@ public class QuestionCardFragment extends Fragment {
     protected static final String STATE = "state";
 
     private String chosenState;
+    private TextView questionNumText = null;
+    private TextView questionText = null;
+    private RadioButton rb1 = null;
+    private RadioButton rb2 = null;
+    private RadioButton rb3 = null;
 
     public QuestionCardFragment() {
         // Required empty public constructor
@@ -59,11 +64,7 @@ public class QuestionCardFragment extends Fragment {
                 false);
         //Set the card text
         if(chosenState != null) {
-            TextView questionNumText = null;
-            TextView questionText = null;
-            RadioButton rb1 = null;
-            RadioButton rb2 = null;
-            RadioButton rb3 = null;
+
             for(int i = 0; i < ((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildCount(); i++) {
                 if(((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i).getId() == R.id.questionNumberTextView) {
                     questionNumText = (TextView)((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i);
