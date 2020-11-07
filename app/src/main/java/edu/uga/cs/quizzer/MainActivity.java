@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(quizIntent);
             }
         });
+
         resultsButton = (Button)findViewById(R.id.resultsButton);
         resultsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,5 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(resultsIntent);
             }
         });
+
+
     }
 }
