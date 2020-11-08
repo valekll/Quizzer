@@ -2,6 +2,7 @@ package edu.uga.cs.quizzer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -22,14 +23,13 @@ public class QuizActivity extends AppCompatActivity {
     private int qnum;
     private int[] stateIndices;
     public static String questionNumber = "1.";
-    public static List<List<String>> statesInfo;
-
+    protected static InputStream CSVinputstream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-        initStatesInfo();
+        CSVinputstream = getResources().openRawResource(R.raw.state_capitals);
         stateIndices = generateStateIndices();
         chosenState = "Georgia";
         // savedInstanceState is non-null when there is fragment state
@@ -48,48 +48,6 @@ public class QuizActivity extends AppCompatActivity {
                     .add(R.id.card_container, fragment)
                     .commit();
         }
-    }
-
-    private void initStatesInfo() {
-        statesInfo = new ArrayList<>();
-        try {
-            InputStream istream = getResources().openRawResource(R.raw.state_capitals);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(istream));
-            StringBuilder output = new StringBuilder();
-            String nl;
-            while((nl = reader.readLine()) != null) {
-                output.append(nl);
-            }
-            String fileStr = output.toString();
-            Log.d("Tassle", fileStr);
-            String[] tokens = fileStr.split("\n");
-            for (String token : tokens) {
-                statesInfo.add(parseNextCSVLine(token));
-                Log.d("Turtle", "added new line");
-            }
-
-        } catch (Exception e) {
-            Log.d("Turtle", "initStatesInfo threw exception");
-            e.printStackTrace();
-        }
-
-        Log.d("Turtle", "scanned");
-    }
-
-    private List<String> parseNextCSVLine(String line) {
-        List<String> lineValues = new ArrayList<String>();
-        try {
-            Scanner lineScanner = new Scanner(line);
-            lineScanner.useDelimiter(",");
-            while(lineScanner.hasNext()) {
-                lineValues.add(lineScanner.next().trim());
-            }
-            lineScanner.close();
-        } catch (Exception e) {
-            Log.d("Turtle", "parseNextCSVLine threw exception");
-            e.printStackTrace();
-        }
-        return lineValues;
     }
 
     /**
@@ -122,5 +80,13 @@ public class QuizActivity extends AppCompatActivity {
         for(int i = 0; i < vals.length; i++)
             if(vals[i] == v) return true;
         return false;
+    }
+
+    private class InitDatabaseAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
     }
 }

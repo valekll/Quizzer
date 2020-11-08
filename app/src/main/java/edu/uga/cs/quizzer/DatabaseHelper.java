@@ -10,7 +10,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -51,6 +56,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_RESULTS_Q5_R = "question5results";
     private static final String KEY_RESULTS_Q6 = "question6";
     private static final String KEY_RESULTS_Q6_R = "question6results";
+
+    public static List<List<String>> statesInfo;
 
     /**
      * Constructor for DatabaseHelper class.
@@ -94,6 +101,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 ")";
         sqLiteDatabase.execSQL(CREATE_STATES_TABLE);
         sqLiteDatabase.execSQL(CREATE_RESULTS_TABLE);
+        statesInfo = new ArrayList<List<String>>();
+        initStatesInfo();
+        addState((List<String>[]) statesInfo.toArray());
+        Log.d("Turtle", "Database created");
     }
 
     /**
@@ -157,5 +168,44 @@ class DatabaseHelper extends SQLiteOpenHelper {
             myInstance = new DatabaseHelper(context.getApplicationContext());
         }
         return myInstance;
+    }
+
+    private void initStatesInfo() {
+        statesInfo = new ArrayList<>();
+        try {
+            InputStream istream = QuizActivity.CSVinputstream;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(istream));
+            StringBuilder output = new StringBuilder();
+            String nl;
+            while((nl = reader.readLine()) != null) {
+                output.append(nl);
+            }
+            String fileStr = output.toString();
+            String[] tokens = fileStr.split("\n");
+            for (String token : tokens) {
+                statesInfo.add(parseNextCSVLine(token));
+                Log.d("Turtle", "added new line");
+            }
+
+        } catch (Exception e) {
+            Log.d("Turtle", "initStatesInfo threw exception");
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> parseNextCSVLine(String line) {
+        List<String> lineValues = new ArrayList<String>();
+        try {
+            Scanner lineScanner = new Scanner(line);
+            lineScanner.useDelimiter(",");
+            while(lineScanner.hasNext()) {
+                lineValues.add(lineScanner.next().trim());
+            }
+            lineScanner.close();
+        } catch (Exception e) {
+            Log.d("Turtle", "parseNextCSVLine threw exception");
+            e.printStackTrace();
+        }
+        return lineValues;
     }
 }
