@@ -12,12 +12,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class QuizActivity extends AppCompatActivity {
 
     private String chosenState;
     private int qnum;
+    private int[] stateIndices;
     public static String questionNumber = "1.";
     public static List<List<String>> statesInfo;
 
@@ -27,6 +29,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
         initStatesInfo();
+        stateIndices = generateStateIndices();
         chosenState = "Georgia";
 
         // savedInstanceState is non-null when there is fragment state
@@ -34,6 +37,7 @@ public class QuizActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
+
             qnum = 1;
             questionNumber = qnum + ".";
             Bundle arguments = new Bundle();
@@ -86,5 +90,36 @@ public class QuizActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return lineValues;
+    }
+
+    /**
+     * Generates six unique random states by number to quiz on.
+     * @return the array of the unique state indices
+     */
+    private int[] generateStateIndices() {
+        int[] vals = new int[6];
+        Random rand = new Random();
+        for(int i = 0; i < 6; i++) {
+            boolean valFound = false;
+            while(!valFound) {
+                int x = rand.nextInt(50);
+                if (!containsVal(vals, x)) {
+                    vals[i] = x + 1;
+                    valFound = true;
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if a int value is in an array
+     * @param vals the array
+     * @param v the value
+     * @return whether it's in the array already
+     */
+    private boolean containsVal(int[] vals, int v) {
+        for(int i = 0; i < vals.length; i++)
+            if(vals[i] == v) return true;
+        return false;
     }
 }
