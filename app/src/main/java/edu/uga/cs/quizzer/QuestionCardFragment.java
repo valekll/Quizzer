@@ -51,6 +51,15 @@ public class QuestionCardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /**
+        for(int i = 0; i < QuizActivity.statesInfo.size(); i++) {
+            for(int j = 0; j < QuizActivity.statesInfo.get(i).size(); j++) {
+                Log.d("Turtle", QuizActivity.statesInfo.get(i).get(j));
+            }
+        }
+         */
+
         if (getArguments() != null) {
             chosenState = getArguments().getString(STATE);
         }
