@@ -3,6 +3,7 @@ package edu.uga.cs.quizzer;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -31,7 +32,6 @@ public class QuizActivity extends AppCompatActivity {
         initStatesInfo();
         stateIndices = generateStateIndices();
         chosenState = "Georgia";
-
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         if (savedInstanceState == null) {

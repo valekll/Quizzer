@@ -101,7 +101,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        //version mismatch: drop old tables and readd current ones
+        //version mismatch: drop old tables and read current ones
         if (i != i1) {
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_STATES);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULTS);
