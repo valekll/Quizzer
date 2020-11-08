@@ -109,6 +109,7 @@ public class QuizActivity extends AppCompatActivity {
                 }
             }
         }
+        return vals;
     }
 
     /**
