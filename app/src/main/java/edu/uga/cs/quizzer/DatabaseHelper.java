@@ -105,6 +105,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_RESULTS_TABLE);
         //init the ArrayList to be used
         initStatesInfo();
+        statesInfo.remove(0);
         //add all the info of the states to the database
         addState((List<String>[]) statesInfo.toArray());
         Log.d("Turtle", "Database created");
@@ -119,6 +120,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         if (i != i1) {
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_STATES);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULTS);
+            Log.d("Turtle", "Old Tables Removed.");
             onCreate(sqLiteDatabase);
         }
     }
@@ -164,6 +166,15 @@ class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Gets a state based on it's ID in the table.
+     * @param id
+     * @return
+     */
+    public State getState(int id) {
+        return null;
+    }
+
+    /**
      * Allows user to access the same version of the database helper throughout multiple invocations
      * from different locations.
      * @param context the application context
@@ -174,6 +185,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         if(myInstance == null) {
             myInstance = new DatabaseHelper(context.getApplicationContext());
         }
+        Log.d("Turtle", "Database helper is setup.");
         return myInstance;
     }
 

@@ -22,6 +22,7 @@ public class QuizActivity extends AppCompatActivity {
     private String chosenState;
     private int qnum;
     private int[] stateIndices;
+    private DatabaseHelper myDatabaseHelper;
     public static String questionNumber = "1.";
     protected static InputStream CSVinputstream;
 
@@ -29,15 +30,16 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-        CSVinputstream = getResources().openRawResource(R.raw.state_capitals);
-        stateIndices = generateStateIndices();
-        chosenState = "Georgia";
+
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-
+            CSVinputstream = getResources().openRawResource(R.raw.state_capitals);
+            new InitDatabaseAsyncTask(this).execute();
+            stateIndices = generateStateIndices();
+            chosenState = "Georgia";
             qnum = 1;
             questionNumber = qnum + ".";
             Bundle arguments = new Bundle();
@@ -82,11 +84,21 @@ public class QuizActivity extends AppCompatActivity {
         return false;
     }
 
-    private class InitDatabaseAsyncTask extends AsyncTask<Void, Void, Void> {
+    private class InitDatabaseAsyncTask extends AsyncTask<Void, Void, DatabaseHelper> {
+
+        private QuizActivity quizActivity;
+
+        /**
+         * Pass through for a reference to current quiz activity.
+         * @param quizActivity the reference
+         */
+        public InitDatabaseAsyncTask(QuizActivity quizActivity) {
+            this.quizActivity = quizActivity;
+        }
 
         @Override
-        protected Void doInBackground(Void... voids) {
-            return null;
+        protected DatabaseHelper doInBackground(Void... voids) {
+            return DatabaseHelper.getInstance(quizActivity);
         }
     }
 }
