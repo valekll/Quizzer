@@ -179,21 +179,27 @@ class DatabaseHelper extends SQLiteOpenHelper {
     public State getState(int id) {
         String GET_STATE_QUERY = String.format("SELECT * FROM " + TABLE_STATES);
         SQLiteDatabase myDatabase = getReadableDatabase();
-        Cursor myCursor = myDatabase.rawQuery(GET_STATE_QUERY, null);
-        State myState = new State();
+        //Cursor myCursor = myDatabase.rawQuery(GET_STATE_QUERY, null);
+        String[] cols = {KEY_STATES_STATE, KEY_STATES_CAPITAL_CITY, KEY_STATES_SECOND_CITY, KEY_STATES_THIRD_CITY};
+        Cursor myCursor = myDatabase.query(TABLE_STATES, cols, KEY_RESULTS_ID + " = " + id,
+                null, null, null, null);
+        List<State> myStates = new ArrayList<State>();
         if(myCursor.moveToFirst()) {
-            String s = myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE));
-            Log.d("Turtle", "query");
-            myState = new State(
-                    myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE)),
-                    myCursor.getString(myCursor.getColumnIndex(KEY_STATES_CAPITAL_CITY)),
-                    myCursor.getString(myCursor.getColumnIndex(KEY_STATES_SECOND_CITY)),
-                    myCursor.getString(myCursor.getColumnIndex(KEY_STATES_THIRD_CITY))
-            );
+            do {
+                String s = myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE));
+                Log.d("Turtle", "query");
+                State myState = new State(
+                        myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE)),
+                        myCursor.getString(myCursor.getColumnIndex(KEY_STATES_CAPITAL_CITY)),
+                        myCursor.getString(myCursor.getColumnIndex(KEY_STATES_SECOND_CITY)),
+                        myCursor.getString(myCursor.getColumnIndex(KEY_STATES_THIRD_CITY))
+                );
+                myStates.add(myState);
+            } while (myCursor.moveToNext());
         }
         myCursor.close();
-        Log.d("Turtle", "State: \n" + myState.toString());
-        return myState;
+        Log.d("Turtle", "State: \n" + myStates.get(0).toString());
+        return myStates.get(0);
     }
 
     /**
