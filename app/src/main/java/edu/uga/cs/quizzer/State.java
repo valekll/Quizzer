@@ -10,6 +10,10 @@ public class State {
     private String city1;
     private String city2;
 
+    //Constructor for state
+    public State() {
+    }
+
     /**
      * Constructor for state
      * @param name state name

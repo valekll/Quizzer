@@ -64,6 +64,12 @@ class DatabaseHelper extends SQLiteOpenHelper {
      */
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        //init the ArrayList to be used
+        initStatesInfo();
+        //add all the info of the states to the database
+        for(List<String> line : statesInfo) {
+            addState(line);
+        }
     }
 
     /**
@@ -72,43 +78,42 @@ class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        Log.d("Turtle", "Database is being created.");
         //Create command strings
         String CREATE_STATES_TABLE = "CREATE TABLE " + TABLE_STATES +
-                "(" + KEY_STATES_ID + " INT(2) NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-                KEY_STATES_STATE +" VARCHAR(15) NOT NULL," +
-                KEY_STATES_CAPITAL_CITY + " VARCHAR(20) NOT NULL," +
-                KEY_STATES_SECOND_CITY + " VARCHAR(20) NOT NULL," +
-                KEY_STATES_THIRD_CITY + " VARCHAR(20) NOT NULL," +
-                KEY_STATES_STATEHOOD + " INT(4) NOT NULL," +
-                KEY_STATES_CAPITAL_SINCE + " INT(4) NOT NULL," +
-                KEY_STATES_SIZE_RANK + " INT(2) NOT NULL" +
+                "(" + KEY_STATES_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                KEY_STATES_STATE +" TEXT NOT NULL," +
+                KEY_STATES_CAPITAL_CITY + " TEXT NOT NULL," +
+                KEY_STATES_SECOND_CITY + " TEXT NOT NULL," +
+                KEY_STATES_THIRD_CITY + " TEXT NOT NULL," +
+                KEY_STATES_STATEHOOD + " INTEGER NOT NULL," +
+                KEY_STATES_CAPITAL_SINCE + " INTEGER NOT NULL," +
+                KEY_STATES_SIZE_RANK + " INTEGER NOT NULL" +
                 ")";
         String CREATE_RESULTS_TABLE = "CREATE TABLE " + TABLE_RESULTS +
-                "(" + KEY_RESULTS_ID +" INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-                KEY_RESULTS_DATE + " DATE NOT NULL DEFAULT SYSDATE," +
-                KEY_RESULTS_SCORE + " INT(3) NOT NULL," +
-                KEY_RESULTS_Q1 + " VARCHAR(15) NOT NULL," +
-                KEY_RESULTS_Q1_R + " BOOLEAN NOT NULL," +
-                KEY_RESULTS_Q2 + " VARCHAR(15) NOT NULL," +
-                KEY_RESULTS_Q2_R + " BOOLEAN NOT NULL," +
-                KEY_RESULTS_Q3 + " VARCHAR(15) NOT NULL," +
-                KEY_RESULTS_Q3_R + " BOOLEAN NOT NULL," +
-                KEY_RESULTS_Q4 + " VARCHAR(15) NOT NULL," +
-                KEY_RESULTS_Q4_R + " BOOLEAN NOT NULL," +
-                KEY_RESULTS_Q5 + " VARCHAR(15) NOT NULL," +
-                KEY_RESULTS_Q5_R + " BOOLEAN NOT NULL," +
-                KEY_RESULTS_Q6 + " VARCHAR(15) NOT NULL," +
-                KEY_RESULTS_Q6_R + " BOOLEAN NOT NULL" +
+                "(" + KEY_RESULTS_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                KEY_RESULTS_DATE + " DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+                KEY_RESULTS_SCORE + " INTEGER NOT NULL," +
+                KEY_RESULTS_Q1 + " TEXT NOT NULL," +
+                KEY_RESULTS_Q1_R + " INTEGER NOT NULL," +
+                KEY_RESULTS_Q2 + " TEXT NOT NULL," +
+                KEY_RESULTS_Q2_R + " INTEGER NOT NULL," +
+                KEY_RESULTS_Q3 + " TEXT NOT NULL," +
+                KEY_RESULTS_Q3_R + " INTEGER NOT NULL," +
+                KEY_RESULTS_Q4 + " TEXT NOT NULL," +
+                KEY_RESULTS_Q4_R + " INTEGER NOT NULL," +
+                KEY_RESULTS_Q5 + " TEXT NOT NULL," +
+                KEY_RESULTS_Q5_R + " INTEGER NOT NULL," +
+                KEY_RESULTS_Q6 + " TEXT NOT NULL," +
+                KEY_RESULTS_Q6_R + " INTEGER NOT NULL" +
                 ")";
         //exec command strings to make tables
         sqLiteDatabase.execSQL(CREATE_STATES_TABLE);
+        Log.d("Turtle", "States table created.");
         sqLiteDatabase.execSQL(CREATE_RESULTS_TABLE);
-        //init the ArrayList to be used
-        initStatesInfo();
-        statesInfo.remove(0);
-        //add all the info of the states to the database
-        addState((List<String>[]) statesInfo.toArray());
+        Log.d("Turtle", "Results table created.");
         Log.d("Turtle", "Database created");
+
     }
 
     /**
@@ -130,8 +135,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * @param stateInfo the info of the state being input to the database
      */
     public void addState(List<String> ... stateInfo) {
+        Log.d("Turtle", "Adding new state(s)");
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
+        Log.d("Turtle", "Database opened.");
         for(List<String> inf : stateInfo) {
             try {
                 //dictionary for the values
@@ -167,11 +174,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Gets a state based on it's ID in the table.
-     * @param id
+     * @param id the state's id in the database
      * @return
      */
     public State getState(int id) {
-        return null;
+        State myState = null;
+
+        return myState;
     }
 
     /**
@@ -202,45 +211,30 @@ class DatabaseHelper extends SQLiteOpenHelper {
             StringBuilder output = new StringBuilder();
             String nl;
             while((nl = reader.readLine()) != null) {
-                output.append(nl);
+                output.append(nl + "\n");
+                Log.d("Truck", nl);
             }
             //String built - attach to String object
             String fileStr = output.toString();
+            Log.d("Tassle", fileStr);
             //Tokenize string by lines
-            String[] tokens = fileStr.split("\n");
-            for (String token : tokens) {
-                //Parse each line
-                statesInfo.add(parseNextCSVLine(token));
-                Log.d("Turtle", "added new line");
+            String[] tokens = fileStr.split(",|\\r?\\n");
+            Log.d("Turtle", "tokenized: " + Integer.toString(tokens.length));
+            for(int i = 1; i < 51; i++) {
+                int j = i * 7;
+                List<String> listToAdd = new ArrayList<String>();
+                for(int k = 0; k < 7; k++) {
+                    if(k == 0)
+                        Log.d("Tassle", tokens[k + j].trim());
+                    listToAdd.add(tokens[k + j].trim());
+                }
+                statesInfo.add(listToAdd);
             }
-
+            Log.d("Turtle", "Done adding tokens to Lists.");
         } catch (Exception e) {
             Log.d("Turtle", "initStatesInfo threw exception");
             e.printStackTrace();
         }
     }
 
-    /**
-     * Parses a single line of the CSV file containing states info.
-     * @param line the line to be parse
-     * @return the line's tokens
-     */
-    private List<String> parseNextCSVLine(String line) {
-        List<String> lineValues = new ArrayList<String>();
-        try {
-            //Tokenize line by commas
-            Scanner lineScanner = new Scanner(line);
-            lineScanner.useDelimiter(",");
-            while(lineScanner.hasNext()) {
-                //Trim the value to have no leading/trailing whitespace
-                lineValues.add(lineScanner.next().trim());
-            }
-            lineScanner.close();
-        } catch (Exception e) {
-            Log.d("Turtle", "parseNextCSVLine threw exception");
-            e.printStackTrace();
-        }
-        //Return tokens
-        return lineValues;
-    }
 }
