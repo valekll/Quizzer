@@ -177,17 +177,21 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * @return
      */
     public State getState(int id) {
-        Log.d("Turtle", "here");
-        String GET_STATE_QUERY = "SELECT * FROM " + TABLE_STATES +
-                "WHERE " + KEY_STATES_ID + " = " + id;
+        String GET_STATE_QUERY = String.format("SELECT * FROM " + TABLE_STATES);
         SQLiteDatabase myDatabase = getReadableDatabase();
         Cursor myCursor = myDatabase.rawQuery(GET_STATE_QUERY, null);
-        State myState = new State(
-                myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE)),
-                myCursor.getString(myCursor.getColumnIndex(KEY_STATES_CAPITAL_CITY)),
-                myCursor.getString(myCursor.getColumnIndex(KEY_STATES_SECOND_CITY)),
-                myCursor.getString(myCursor.getColumnIndex(KEY_STATES_THIRD_CITY))
-        );
+        State myState = new State();
+        if(myCursor.moveToFirst()) {
+            String s = myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE));
+            Log.d("Turtle", "query");
+            myState = new State(
+                    myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE)),
+                    myCursor.getString(myCursor.getColumnIndex(KEY_STATES_CAPITAL_CITY)),
+                    myCursor.getString(myCursor.getColumnIndex(KEY_STATES_SECOND_CITY)),
+                    myCursor.getString(myCursor.getColumnIndex(KEY_STATES_THIRD_CITY))
+            );
+        }
+        myCursor.close();
         Log.d("Turtle", "State: \n" + myState.toString());
         return myState;
     }
