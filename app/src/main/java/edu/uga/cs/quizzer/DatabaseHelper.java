@@ -137,9 +137,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
      */
     public void addState(List<String> ... stateInfo) {
         SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
         for(List<String> inf : stateInfo) {
             try {
+                db.beginTransaction();
                 //dictionary for the values
                 ContentValues vals = new ContentValues();
                 for(int i = 0; i < inf.size(); i++) {
@@ -161,14 +161,17 @@ class DatabaseHelper extends SQLiteOpenHelper {
                             break;
                     }
                 }
+                Log.d("Transformer", vals.toString());
                 //insert into the database table
-                db.insertOrThrow(TABLE_STATES, null, vals);
+                long rowNum = db.insertOrThrow(TABLE_STATES, null, vals);
+                Log.d("Transformer", "Row Num: " + rowNum);
             } catch (Exception e) {
                 Log.d("Turtle", "Exception found adding state to database.");
                 e.printStackTrace();
+            } finally {
+                db.endTransaction();
             }
         }
-        db.endTransaction();
     }
 
     /**
@@ -177,29 +180,31 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * @return
      */
     public State getState(int id) {
-        String GET_STATE_QUERY = String.format("SELECT * FROM " + TABLE_STATES);
+        String GET_STATE_QUERY = "SELECT * FROM " + TABLE_STATES + " WHERE " + KEY_STATES_ID + " = 1";
         SQLiteDatabase myDatabase = getReadableDatabase();
-        //Cursor myCursor = myDatabase.rawQuery(GET_STATE_QUERY, null);
+        Cursor myCursor = myDatabase.rawQuery(GET_STATE_QUERY, null);
+        Log.d("Turtle", "Cursor count: " + myCursor.getCount());
         String[] cols = {KEY_STATES_STATE, KEY_STATES_CAPITAL_CITY, KEY_STATES_SECOND_CITY, KEY_STATES_THIRD_CITY};
-        Cursor myCursor = myDatabase.query(TABLE_STATES, cols, KEY_RESULTS_ID + " = " + id,
-                null, null, null, null);
-        List<State> myStates = new ArrayList<State>();
+        //Cursor myCursor = myDatabase.query(TABLE_STATES, cols, KEY_RESULTS_ID + " = " + id,
+        //        null, null, null, null);
+        //List<State> myStates = new ArrayList<State>();
+        State myState = null;
         if(myCursor.moveToFirst()) {
             do {
                 String s = myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE));
                 Log.d("Turtle", "query");
-                State myState = new State(
+                myState = new State(
                         myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE)),
                         myCursor.getString(myCursor.getColumnIndex(KEY_STATES_CAPITAL_CITY)),
                         myCursor.getString(myCursor.getColumnIndex(KEY_STATES_SECOND_CITY)),
                         myCursor.getString(myCursor.getColumnIndex(KEY_STATES_THIRD_CITY))
                 );
-                myStates.add(myState);
+                //myStates.add(myState);
             } while (myCursor.moveToNext());
         }
         myCursor.close();
-        Log.d("Turtle", "State: \n" + myStates.get(0).toString());
-        return myStates.get(0);
+        Log.d("Turtle", "State: \n" + myState);
+        return myState;
     }
 
     /**
