@@ -38,6 +38,7 @@ public class QuizActivity extends AppCompatActivity {
             // using a fragment transaction.
             CSVinputstream = getResources().openRawResource(R.raw.state_capitals);
             new InitDatabaseAsyncTask(this).execute();
+            new StateQueryAsyncTask().execute();
             stateIndices = generateStateIndices();
             chosenState = "Georgia";
             qnum = 1;
@@ -84,7 +85,10 @@ public class QuizActivity extends AppCompatActivity {
         return false;
     }
 
-    private class InitDatabaseAsyncTask extends AsyncTask<Void, Void, DatabaseHelper> {
+    /**
+     * Async Task to initialize database.
+     */
+    private class InitDatabaseAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private QuizActivity quizActivity;
 
@@ -96,9 +100,28 @@ public class QuizActivity extends AppCompatActivity {
             this.quizActivity = quizActivity;
         }
 
+        /**
+         * The method to be conducted asynchronously
+         * @return the DatabaseHelper object
+         */
         @Override
-        protected DatabaseHelper doInBackground(Void... voids) {
-            return DatabaseHelper.getInstance(quizActivity);
+        protected Void doInBackground(Void... voids) {
+            myDatabaseHelper = DatabaseHelper.getInstance(quizActivity);
+            return null;
+        }
+    }
+
+    /**
+     * Async Task to make a database query for a state's info.
+     */
+    private class StateQueryAsyncTask extends AsyncTask<Void, Void, State> {
+        /**
+         * The method to be conducted asynchronously
+         * @return the State object
+         */
+        @Override
+        protected State doInBackground(Void... voids) {
+            return myDatabaseHelper.getState(1);
         }
     }
 }

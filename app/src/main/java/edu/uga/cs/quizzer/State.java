@@ -75,4 +75,15 @@ public class State {
     public void setCity2(String city2) {
         this.city2 = city2;
     }
+
+    //toString
+    @Override
+    public String toString() {
+        return "State{" +
+                "name='" + name + '\'' +
+                ", capital='" + capital + '\'' +
+                ", city1='" + city1 + '\'' +
+                ", city2='" + city2 + '\'' +
+                '}';
+    }
 }

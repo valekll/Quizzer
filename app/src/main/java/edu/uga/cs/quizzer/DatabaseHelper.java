@@ -2,6 +2,7 @@ package edu.uga.cs.quizzer;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -135,10 +136,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * @param stateInfo the info of the state being input to the database
      */
     public void addState(List<String> ... stateInfo) {
-        Log.d("Turtle", "Adding new state(s)");
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-        Log.d("Turtle", "Database opened.");
         for(List<String> inf : stateInfo) {
             try {
                 //dictionary for the values
@@ -178,8 +177,18 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * @return
      */
     public State getState(int id) {
-        State myState = null;
-
+        Log.d("Turtle", "here");
+        String GET_STATE_QUERY = "SELECT * FROM " + TABLE_STATES +
+                "WHERE " + KEY_STATES_ID + " = " + id;
+        SQLiteDatabase myDatabase = getReadableDatabase();
+        Cursor myCursor = myDatabase.rawQuery(GET_STATE_QUERY, null);
+        State myState = new State(
+                myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE)),
+                myCursor.getString(myCursor.getColumnIndex(KEY_STATES_CAPITAL_CITY)),
+                myCursor.getString(myCursor.getColumnIndex(KEY_STATES_SECOND_CITY)),
+                myCursor.getString(myCursor.getColumnIndex(KEY_STATES_THIRD_CITY))
+        );
+        Log.d("Turtle", "State: \n" + myState.toString());
         return myState;
     }
 
@@ -224,8 +233,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 int j = i * 7;
                 List<String> listToAdd = new ArrayList<String>();
                 for(int k = 0; k < 7; k++) {
-                    if(k == 0)
-                        Log.d("Tassle", tokens[k + j].trim());
                     listToAdd.add(tokens[k + j].trim());
                 }
                 statesInfo.add(listToAdd);
