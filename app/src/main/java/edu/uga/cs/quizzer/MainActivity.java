@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button startButton;
     private Button resultsButton;
+    private Button informationButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        informationButton = (Button)findViewById(R.id.informationButton);
+        informationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent informationIntent = new Intent(view.getContext(), InformationActivity.class);
+                MainActivity.this.startActivity(informationIntent);
+            }
+        });
     }
 }
