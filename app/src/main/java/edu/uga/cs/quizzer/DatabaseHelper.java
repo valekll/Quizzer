@@ -72,6 +72,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        //Create command strings
         String CREATE_STATES_TABLE = "CREATE TABLE " + TABLE_STATES +
                 "(" + KEY_STATES_ID + " INT(2) NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                 KEY_STATES_STATE +" VARCHAR(15) NOT NULL," +
@@ -99,10 +100,12 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 KEY_RESULTS_Q6 + " VARCHAR(15) NOT NULL," +
                 KEY_RESULTS_Q6_R + " BOOLEAN NOT NULL" +
                 ")";
+        //exec command strings to make tables
         sqLiteDatabase.execSQL(CREATE_STATES_TABLE);
         sqLiteDatabase.execSQL(CREATE_RESULTS_TABLE);
-        statesInfo = new ArrayList<List<String>>();
+        //init the ArrayList to be used
         initStatesInfo();
+        //add all the info of the states to the database
         addState((List<String>[]) statesInfo.toArray());
         Log.d("Turtle", "Database created");
     }
@@ -129,8 +132,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         for(List<String> inf : stateInfo) {
             try {
+                //dictionary for the values
                 ContentValues vals = new ContentValues();
                 for(int i = 0; i < inf.size(); i++) {
+                    //pair each key and value
                     switch (i) {
                         case 0: vals.put(KEY_STATES_STATE, inf.get(i));
                             break;
@@ -148,6 +153,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                             break;
                     }
                 }
+                //insert into the database table
                 db.insertOrThrow(TABLE_STATES, null, vals);
             } catch (Exception e) {
                 Log.d("Turtle", "Exception found adding state to database.");
@@ -164,25 +170,34 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * @return the DatabaseHelper instance being used
      */
     public static synchronized DatabaseHelper getInstance(Context context) {
+        //check if already initialized
         if(myInstance == null) {
             myInstance = new DatabaseHelper(context.getApplicationContext());
         }
         return myInstance;
     }
 
+    /**
+     * Initializes a List of List of Strings from the CSV file containing state info.
+     */
     private void initStatesInfo() {
         statesInfo = new ArrayList<>();
         try {
+            //Get CSV as InputStream
             InputStream istream = QuizActivity.CSVinputstream;
             BufferedReader reader = new BufferedReader(new InputStreamReader(istream));
+            //Build a string from the InputString
             StringBuilder output = new StringBuilder();
             String nl;
             while((nl = reader.readLine()) != null) {
                 output.append(nl);
             }
+            //String built - attach to String object
             String fileStr = output.toString();
+            //Tokenize string by lines
             String[] tokens = fileStr.split("\n");
             for (String token : tokens) {
+                //Parse each line
                 statesInfo.add(parseNextCSVLine(token));
                 Log.d("Turtle", "added new line");
             }
@@ -193,12 +208,19 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Parses a single line of the CSV file containing states info.
+     * @param line the line to be parse
+     * @return the line's tokens
+     */
     private List<String> parseNextCSVLine(String line) {
         List<String> lineValues = new ArrayList<String>();
         try {
+            //Tokenize line by commas
             Scanner lineScanner = new Scanner(line);
             lineScanner.useDelimiter(",");
             while(lineScanner.hasNext()) {
+                //Trim the value to have no leading/trailing whitespace
                 lineValues.add(lineScanner.next().trim());
             }
             lineScanner.close();
@@ -206,6 +228,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
             Log.d("Turtle", "parseNextCSVLine threw exception");
             e.printStackTrace();
         }
+        //Return tokens
         return lineValues;
     }
 }
