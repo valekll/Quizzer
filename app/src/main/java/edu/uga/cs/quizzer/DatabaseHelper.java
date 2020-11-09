@@ -135,43 +135,43 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * Add a state to the database
      * @param stateInfo the info of the state being input to the database
      */
-    public void addState(List<String> ... stateInfo) {
+    public void addState(List<String> stateInfo) {
         SQLiteDatabase db = getWritableDatabase();
-        for(List<String> inf : stateInfo) {
-            try {
-                db.beginTransaction();
-                //dictionary for the values
-                ContentValues vals = new ContentValues();
-                for(int i = 0; i < inf.size(); i++) {
-                    //pair each key and value
-                    switch (i) {
-                        case 0: vals.put(KEY_STATES_STATE, inf.get(i));
-                            break;
-                        case 1: vals.put(KEY_STATES_CAPITAL_CITY, inf.get(i));
-                            break;
-                        case 2: vals.put(KEY_STATES_SECOND_CITY, inf.get(i));
-                            break;
-                        case 3: vals.put(KEY_STATES_THIRD_CITY, inf.get(i));
-                            break;
-                        case 4: vals.put(KEY_STATES_STATEHOOD, inf.get(i));
-                            break;
-                        case 5: vals.put(KEY_STATES_CAPITAL_SINCE, inf.get(i));
-                            break;
-                        case 6: vals.put(KEY_STATES_SIZE_RANK, inf.get(i));
-                            break;
-                    }
+        try {
+            db.beginTransaction();
+            //dictionary for the values
+            ContentValues vals = new ContentValues();
+            for(int i = 0; i < stateInfo.size(); i++) {
+                //pair each key and value
+                switch (i) {
+                    case 0: vals.put(KEY_STATES_STATE, stateInfo.get(i));
+                    break;
+                    case 1: vals.put(KEY_STATES_CAPITAL_CITY, stateInfo.get(i));
+                    break;
+                    case 2: vals.put(KEY_STATES_SECOND_CITY, stateInfo.get(i));
+                    break;
+                    case 3: vals.put(KEY_STATES_THIRD_CITY, stateInfo.get(i));
+                    break;
+                    case 4: vals.put(KEY_STATES_STATEHOOD, stateInfo.get(i));
+                    break;
+                    case 5: vals.put(KEY_STATES_CAPITAL_SINCE, stateInfo.get(i));
+                    break;
+                    case 6: vals.put(KEY_STATES_SIZE_RANK, stateInfo.get(i));
+                    break;
                 }
-                Log.d("Transformer", vals.toString());
-                //insert into the database table
-                long rowNum = db.insertOrThrow(TABLE_STATES, null, vals);
-                Log.d("Transformer", "Row Num: " + rowNum);
-            } catch (Exception e) {
-                Log.d("Turtle", "Exception found adding state to database.");
-                e.printStackTrace();
-            } finally {
-                db.endTransaction();
             }
+            Log.d("Transformer", vals.toString());
+            //insert into the database table
+            long rowNum = db.insertOrThrow(TABLE_STATES, null, vals);
+            db.setTransactionSuccessful();
+            Log.d("Transformer", "Row Num: " + rowNum);
+        } catch (Exception e) {
+            Log.d("Turtle", "Exception found adding state to database.");
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
         }
+
     }
 
     /**
@@ -180,7 +180,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * @return
      */
     public State getState(int id) {
-        String GET_STATE_QUERY = "SELECT * FROM " + TABLE_STATES + " WHERE " + KEY_STATES_ID + " = 1";
+        String GET_STATE_QUERY = "SELECT * FROM " + TABLE_STATES + " WHERE " + KEY_STATES_ID + " = " + id;
         SQLiteDatabase myDatabase = getReadableDatabase();
         Cursor myCursor = myDatabase.rawQuery(GET_STATE_QUERY, null);
         Log.d("Turtle", "Cursor count: " + myCursor.getCount());

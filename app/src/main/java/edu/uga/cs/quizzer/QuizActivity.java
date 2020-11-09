@@ -38,7 +38,7 @@ public class QuizActivity extends AppCompatActivity {
             // using a fragment transaction.
             CSVinputstream = getResources().openRawResource(R.raw.state_capitals);
             new InitDatabaseAsyncTask(this).execute();
-            //new StateQueryAsyncTask().execute();
+            new StateQueryAsyncTask().execute();
             stateIndices = generateStateIndices();
             chosenState = "Georgia";
             qnum = 1;
@@ -121,7 +121,7 @@ public class QuizActivity extends AppCompatActivity {
          */
         @Override
         protected State doInBackground(Void... voids) {
-            return myDatabaseHelper.getState(1);
+            return myDatabaseHelper.getState(4);
         }
     }
 }
