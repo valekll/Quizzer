@@ -8,10 +8,12 @@
     tools:context=".InformationActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView1"
         android:layout_width="493dp"
         android:layout_height="313dp"
+        android:fontFamily="@font/audiowide"
         android:text="How to play the game"
+        android:textColor="#070707"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

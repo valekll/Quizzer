@@ -12,8 +12,10 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
-        TextView textView = findViewById(R.id.textView);
+        TextView textView1 = findViewById(R.id.textView1);
+        TextView textView2 = findViewById(R.id.textView2);
 
-        textView.setText("FUCK");
+        textView1.setText("Date");
+        textView2.setText("Score");
     }
 }
