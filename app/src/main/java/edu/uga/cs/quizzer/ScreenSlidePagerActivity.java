@@ -15,6 +15,9 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Activity to facilitate the quiz.
+ */
 public class ScreenSlidePagerActivity extends FragmentActivity {
 
     //declare some vars
@@ -59,6 +62,9 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * Method that controls how the pager adapter works when back button is pressed.
+     */
     @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
@@ -78,19 +84,31 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
 
         public int[] stateIndices;
 
+        /**
+         * Constructor
+         * @param fm the fragment manager being used
+         */
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
             stateIndices = generateStateIndices();
         }
 
+        /**
+         * Gets the fragment at given position.
+         * @param position the fragment index
+         * @return the fragment
+         */
         @Override
         public Fragment getItem(int position) {
+            //Submit Button Fragment
             if (position == 6) {
                 return new EndQuizFragment();
             }
+            //Quiz Question Card Fragment
             else {
                 questionNumber = position + 1;
                 int stateIndex = stateIndices[position];
+                //Set up bundle
                 Bundle arguments = new Bundle();
                 arguments.putInt(QuestionCardFragment.QNUM, questionNumber);
                 arguments.putInt(QuestionCardFragment.STATE_INDEX, stateIndex);
@@ -102,13 +120,14 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
             }
         }
 
+        /**
+         * @return the number of pages
+         */
         @Override
         public int getCount() {
             return NUM_PAGES;
         }
     }
-
-
 
     /**
      * Generates six unique random states by number to quiz on.
@@ -118,9 +137,11 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
         int[] vals = new int[6];
         Random rand = new Random();
         for(int i = 0; i < 6; i++) {
+            //check if in vals
             boolean valFound = false;
             while(!valFound) {
                 int x = rand.nextInt(50);
+                //add to vals
                 if (!containsVal(vals, x)) {
                     vals[i] = x + 1;
                     valFound = true;
