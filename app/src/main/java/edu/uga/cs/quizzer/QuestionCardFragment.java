@@ -1,10 +1,8 @@
 package edu.uga.cs.quizzer;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -15,16 +13,13 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A fragment that displays a card with a quiz question.
  */
 public class QuestionCardFragment extends Fragment {
 
@@ -33,6 +28,7 @@ public class QuestionCardFragment extends Fragment {
     protected static final String QNUM = "questionNumber";
     public static final String STATE_INDEX = "stateIndex";
 
+    //declare vars
     private State chosenState;
     private int chosenStateIndex;
     private int questionNumber;
@@ -43,26 +39,38 @@ public class QuestionCardFragment extends Fragment {
     private RadioButton rb2 = null;
     private RadioButton rb3 = null;
 
+    // Required empty public constructor
     public QuestionCardFragment() {
-        // Required empty public constructor
     }
 
+    /**
+     * Creates the fragment based on a saved instance state.
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //get the args provided
         if (getArguments() != null) {
             questionNumber = getArguments().getInt(QNUM);
             chosenStateIndex = getArguments().getInt(STATE_INDEX);
         }
     }
 
+    /**
+     * Creates the view for the fragment
+     * @param inflater the inflater for the xml
+     * @param container the view's container
+     * @param savedInstanceState the saved instance state
+     * @return the view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_question_card, container,
                 false);
+        //Get the state info from the database
         try {
             chosenState = new StateQueryAsyncTask().execute().get();
         } catch (ExecutionException e) {
@@ -70,10 +78,8 @@ public class QuestionCardFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Log.d("Turtle", "Chosen State needed here.");
         //Set the card text
         if(chosenState != null) {
-
             //find the buttons in xml
             questionNumText = (TextView)rootView.findViewById(R.id.questionNumberTextView);
             questionText = (TextView)rootView.findViewById(R.id.quizQuestionTextView);
@@ -93,6 +99,7 @@ public class QuestionCardFragment extends Fragment {
             cities.add(chosenState.getCapital());
             cities.add(chosenState.getCity1());
             cities.add(chosenState.getCity2());
+            //setup radio buttons to their choices and make them save user input
             rb1.setText(cities.remove(choice1));
             rb1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -117,34 +124,32 @@ public class QuestionCardFragment extends Fragment {
                     writeAnswerToFile();
                 }
             });
-
         }
-
         return rootView;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-    }
-
+    /**
+     * Writes the current selected answer to a question file.
+     */
     private void writeAnswerToFile() {
         String ans = "";
+        //check for correctness
         if(selectedAnswer != null && chosenState != null &&
                 selectedAnswer.equalsIgnoreCase(chosenState.getCapital())) {
             Log.d("Titanium", "state: " + chosenState.getName() + " selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
             Log.d("Titanium", "correct");
             ans = "1.0";
         }
+        //incorrect
         else {
             Log.d("Titanium", "state: " + chosenState.getName() + " selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
             ans = "0.0";
         }
+        //get file
         File path = getContext().getFilesDir();
         Log.d("Titanium", "path: |" + path.getPath());
         File file = new File(path, "q" + questionNumber + ".ans");
-
+        //write to file
         try {
             FileOutputStream str = new FileOutputStream(file);
             str.write(ans.getBytes());
@@ -154,11 +159,15 @@ public class QuestionCardFragment extends Fragment {
         }
     }
 
+    /**
+     * Zeroes out the question in case it goes unanswered in file.
+     */
     private void writeInitialAnswerToFile() {
+        //get file path
         File path = getContext().getFilesDir();
         Log.d("Titanium", "path: |" + path.getPath());
         File file = new File(path, "q" + questionNumber + ".ans");
-
+        //write to file
         try {
             FileOutputStream str = new FileOutputStream(file);
             str.write("0.0".getBytes());
