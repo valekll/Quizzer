@@ -103,7 +103,7 @@ public class QuestionCardFragment extends Fragment {
          */
         @Override
         protected State doInBackground(Void... voids) {
-            return QuizActivity.myDatabaseHelper.getState(chosenStateIndex);
+            return ScreenSlidePagerActivity.myDatabaseHelper.getState(chosenStateIndex);
         }
 
     }

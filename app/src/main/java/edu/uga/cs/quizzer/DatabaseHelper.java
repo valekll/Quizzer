@@ -228,7 +228,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         statesInfo = new ArrayList<>();
         try {
             //Get CSV as InputStream
-            InputStream istream = QuizActivity.CSVinputstream;
+            InputStream istream = ScreenSlidePagerActivity.CSVinputstream;
             BufferedReader reader = new BufferedReader(new InputStreamReader(istream));
             //Build a string from the InputString
             StringBuilder output = new StringBuilder();

@@ -36,7 +36,6 @@ public class QuizActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             CSVinputstream = getResources().openRawResource(R.raw.state_capitals);
-
             new InitDatabaseAsyncTask(this).execute();
             int[] stateIndices = generateStateIndices();
 
