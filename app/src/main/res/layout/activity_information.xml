@@ -11,6 +11,7 @@
         android:id="@+id/textView"
         android:layout_width="266dp"
         android:layout_height="183dp"
+        android:fontFamily="@font/audiowide"
         android:text="How to play the game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
