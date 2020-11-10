@@ -238,6 +238,32 @@ class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Gets all results in the table.
+     * @return a list of the results
+     */
+    public ArrayList<Result> getResults() {
+        String GET_RESULTS_QUERY = "SELECT * FROM " + TABLE_RESULTS;
+        SQLiteDatabase myDatabase = getReadableDatabase();
+        Cursor myCursor = myDatabase.rawQuery(GET_RESULTS_QUERY, null);
+        Log.d("Turkey", "Cursor count: " + myCursor.getCount());
+        String[] cols = {KEY_RESULTS_DATE, KEY_RESULTS_ID, KEY_RESULTS_SCORE};
+        ArrayList<Result> myResults = new ArrayList<Result>();
+        Result myResult = new Result();
+        if(myCursor.moveToFirst()) {
+            do {
+                myResult = new Result(
+                        myCursor.getString(myCursor.getColumnIndex(KEY_RESULTS_DATE)),
+                        myCursor.getInt(myCursor.getColumnIndex(KEY_RESULTS_ID)),
+                        myCursor.getInt(myCursor.getColumnIndex(KEY_RESULTS_SCORE))
+                );
+                myResults.add(myResult);
+            } while (myCursor.moveToNext());
+        }
+        myCursor.close();
+        return myResults;
+    }
+
+    /**
      * Allows user to access the same version of the database helper throughout multiple invocations
      * from different locations.
      * @param context the application context
