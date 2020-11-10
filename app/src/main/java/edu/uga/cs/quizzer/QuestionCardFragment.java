@@ -1,5 +1,6 @@
 package edu.uga.cs.quizzer;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -13,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -114,13 +118,26 @@ public class QuestionCardFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        String ans = "";
         if(selectedAnswer != null && chosenState != null &&
                 selectedAnswer.equalsIgnoreCase(chosenState.getCapital())) {
             Log.d("Titanium", "state: " + chosenState.getName() + " selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
             Log.d("Titanium", "correct");
+            ans = "1";
         }
         else {
             Log.d("Titanium", "state: " + chosenState.getName() + " selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
+            ans = "0";
+        }
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("q" + questionNumber + ".ans", Context.MODE_PRIVATE));
+            outputStreamWriter.write(ans);
+            outputStreamWriter.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
