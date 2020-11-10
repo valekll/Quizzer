@@ -116,10 +116,11 @@ public class QuestionCardFragment extends Fragment {
         super.onDestroyView();
         if(selectedAnswer != null && chosenState != null &&
                 selectedAnswer.equalsIgnoreCase(chosenState.getCapital())) {
+            Log.d("Titanium", "state: " + chosenState.getName() + " selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
             Log.d("Titanium", "correct");
         }
         else {
-            Log.d("Titanium", "selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
+            Log.d("Titanium", "state: " + chosenState.getName() + " selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
         }
     }
 
