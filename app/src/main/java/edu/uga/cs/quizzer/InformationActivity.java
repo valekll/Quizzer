@@ -11,7 +11,7 @@ public class InformationActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_information);
 
-            TextView textView = findViewById(R.id.textView);
+            TextView textView = findViewById(R.id.textView1);
 
             textView.setText(
                     "How to play the game: \n\n" +
