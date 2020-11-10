@@ -30,6 +30,7 @@ public class QuestionCardFragment extends Fragment {
     private State chosenState;
     private int chosenStateIndex;
     private int questionNumber;
+    private String selectedAnswer;
     private TextView questionNumText = null;
     private TextView questionText = null;
     private RadioButton rb1 = null;
@@ -83,14 +84,39 @@ public class QuestionCardFragment extends Fragment {
             cities.add(chosenState.getCapital());
             cities.add(chosenState.getCity1());
             cities.add(chosenState.getCity2());
-            String ans1 = cities.remove(choice1);
-            rb1.setText(ans1);
+            rb1.setText(cities.remove(choice1));
+            rb1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectedAnswer = (String) rb1.getText();
+                }
+            });
             rb2.setText(cities.remove(choice2));
+            rb2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectedAnswer = (String) rb2.getText();
+                }
+            });
             rb3.setText(cities.remove(0));
+            rb3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectedAnswer = (String) rb3.getText();
+                }
+            });
 
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(selectedAnswer.equalsIgnoreCase(chosenState.getCapital())) {
+            Log.d("Titanium", "correct");
+        }
     }
 
     /**
