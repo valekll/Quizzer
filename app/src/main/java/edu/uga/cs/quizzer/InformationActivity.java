@@ -14,8 +14,14 @@ public class InformationActivity extends AppCompatActivity {
             TextView textView = findViewById(R.id.textView);
 
             textView.setText(
-                    "How to play the game: \n" +
-                    "To start Quizzer, please select on the start button \n"
+                    "How to play the game: \n\n" +
+                        "To start, please select on the start button \n\n" +
+                        "The app will now prompt the user to answer \n\n" +
+                        "Swipe left when the question has been answered (total of six questions) \n\n" +
+                        "After all six questions have been answered, your results will be shown\n\n\n\n" +
+                    "Additional Information: \n\n" +
+                            "To view past result scores, please select on the results button\n\n"
+
             );
         }
 }
