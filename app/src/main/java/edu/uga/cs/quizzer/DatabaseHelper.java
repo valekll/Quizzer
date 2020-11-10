@@ -3,12 +3,10 @@ package edu.uga.cs.quizzer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.BufferedReader;
@@ -18,8 +16,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 
+/**
+ * Helper class to manage the sqlite database
+ */
 class DatabaseHelper extends SQLiteOpenHelper {
 
     //Only instance to prevent multiple copies occurring
@@ -47,20 +47,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_RESULTS_ID = "id";
     private static final String KEY_RESULTS_DATE = "date";
     private static final String KEY_RESULTS_SCORE = "score";
-    /*
-    private static final String KEY_RESULTS_Q1 = "question1";
-    private static final String KEY_RESULTS_Q1_R = "question1results";
-    private static final String KEY_RESULTS_Q2 = "question2";
-    private static final String KEY_RESULTS_Q2_R = "question2results";
-    private static final String KEY_RESULTS_Q3 = "question3";
-    private static final String KEY_RESULTS_Q3_R = "question3results";
-    private static final String KEY_RESULTS_Q4 = "question4";
-    private static final String KEY_RESULTS_Q4_R = "question4results";
-    private static final String KEY_RESULTS_Q5 = "question5";
-    private static final String KEY_RESULTS_Q5_R = "question5results";
-    private static final String KEY_RESULTS_Q6 = "question6";
-    private static final String KEY_RESULTS_Q6_R = "question6results";
-    */
+
     public static List<List<String>> statesInfo;
 
     /**
@@ -98,19 +85,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 "(" + KEY_RESULTS_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                 KEY_RESULTS_DATE + " TEXT NOT NULL," +
                 KEY_RESULTS_SCORE + " INTEGER NOT NULL" +
-                /*
-                KEY_RESULTS_Q1 + " TEXT NOT NULL," +
-                KEY_RESULTS_Q1_R + " INTEGER NOT NULL," +
-                KEY_RESULTS_Q2 + " TEXT NOT NULL," +
-                KEY_RESULTS_Q2_R + " INTEGER NOT NULL," +
-                KEY_RESULTS_Q3 + " TEXT NOT NULL," +
-                KEY_RESULTS_Q3_R + " INTEGER NOT NULL," +
-                KEY_RESULTS_Q4 + " TEXT NOT NULL," +
-                KEY_RESULTS_Q4_R + " INTEGER NOT NULL," +
-                KEY_RESULTS_Q5 + " TEXT NOT NULL," +
-                KEY_RESULTS_Q5_R + " INTEGER NOT NULL," +
-                KEY_RESULTS_Q6 + " TEXT NOT NULL," +
-                KEY_RESULTS_Q6_R + " INTEGER NOT NULL" + */
                 ")";
         //exec command strings to make tables
         sqLiteDatabase.execSQL(CREATE_STATES_TABLE);
@@ -188,6 +162,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
             //dictionary for the values
             ContentValues vals = new ContentValues();
             vals.put(KEY_RESULTS_SCORE, score);
+            //get current date
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String date = sdf.format(new Date());
             vals.put(KEY_RESULTS_DATE, date);
@@ -211,14 +186,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * @return
      */
     public State getState(int id) {
+        //make query
         String GET_STATE_QUERY = "SELECT * FROM " + TABLE_STATES + " WHERE " + KEY_STATES_ID + " = " + id;
         SQLiteDatabase myDatabase = getReadableDatabase();
+        //exec query
         Cursor myCursor = myDatabase.rawQuery(GET_STATE_QUERY, null);
         Log.d("Transformer", "Cursor count: " + myCursor.getCount());
-        String[] cols = {KEY_STATES_STATE, KEY_STATES_CAPITAL_CITY, KEY_STATES_SECOND_CITY, KEY_STATES_THIRD_CITY};
-        //Cursor myCursor = myDatabase.query(TABLE_STATES, cols, KEY_RESULTS_ID + " = " + id,
-        //        null, null, null, null);
-        //List<State> myStates = new ArrayList<State>();
+        //setup state based on query
         State myState = null;
         if(myCursor.moveToFirst()) {
             do {
@@ -229,7 +203,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                         myCursor.getString(myCursor.getColumnIndex(KEY_STATES_SECOND_CITY)),
                         myCursor.getString(myCursor.getColumnIndex(KEY_STATES_THIRD_CITY))
                 );
-                //myStates.add(myState);
             } while (myCursor.moveToNext());
         }
         myCursor.close();
@@ -242,11 +215,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
      * @return a list of the results
      */
     public ArrayList<Result> getResults() {
+        //make query
         String GET_RESULTS_QUERY = "SELECT * FROM " + TABLE_RESULTS;
         SQLiteDatabase myDatabase = getReadableDatabase();
+        //exec query
         Cursor myCursor = myDatabase.rawQuery(GET_RESULTS_QUERY, null);
         Log.d("Turkey", "Cursor count: " + myCursor.getCount());
-        String[] cols = {KEY_RESULTS_DATE, KEY_RESULTS_ID, KEY_RESULTS_SCORE};
+        //compile list of results based on query
         ArrayList<Result> myResults = new ArrayList<Result>();
         Result myResult = new Result();
         if(myCursor.moveToFirst()) {
@@ -314,5 +289,4 @@ class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
-
 }
