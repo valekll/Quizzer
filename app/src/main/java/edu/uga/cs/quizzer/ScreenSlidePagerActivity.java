@@ -26,7 +26,7 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
-    private static final int NUM_PAGES = 6;
+    private static final int NUM_PAGES = 7;
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -85,17 +85,21 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            questionNumber = position + 1;
-            int stateIndex = stateIndices[position];
-            Bundle arguments = new Bundle();
-            arguments.putInt(QuestionCardFragment.QNUM, questionNumber);
-            arguments.putInt(QuestionCardFragment.STATE_INDEX, stateIndex);
-            Log.d("Turtle", "args put in bundle");
+            if (position == 6) {
+                return new EndQuizFragment();
+            }
+            else {
+                questionNumber = position + 1;
+                int stateIndex = stateIndices[position];
+                Bundle arguments = new Bundle();
+                arguments.putInt(QuestionCardFragment.QNUM, questionNumber);
+                arguments.putInt(QuestionCardFragment.STATE_INDEX, stateIndex);
+                Log.d("Turtle", "args put in bundle");
 
-            QuestionCardFragment fragment = new QuestionCardFragment();
-            fragment.setArguments(arguments);
-            //getSupportFragmentManager().beginTransaction().add(R.id.card_container, fragment).commit();
-            return fragment;
+                QuestionCardFragment fragment = new QuestionCardFragment();
+                fragment.setArguments(arguments);
+                return fragment;
+            }
         }
 
         @Override
