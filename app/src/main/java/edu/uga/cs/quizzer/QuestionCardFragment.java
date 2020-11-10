@@ -75,7 +75,7 @@ public class QuestionCardFragment extends Fragment {
             rb3 = (RadioButton)rootView.findViewById(R.id.radioButton3);
             //set values
             questionNumText.setText(questionNumber + ".");
-            questionText.setText("What is the capital of " + chosenState.getName());
+            questionText.setText("What is the capital of " + chosenState.getName() + "?");
             Random rand = new Random();
             int choice1 = rand.nextInt(3);
             int choice2 = rand.nextInt(2);
