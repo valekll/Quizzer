@@ -72,8 +72,7 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
     }
 
     /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
-     * sequence.
+     * A simple pager adapter that represents 7 fragments, in sequence.
      */
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 

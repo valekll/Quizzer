@@ -114,8 +114,12 @@ public class QuestionCardFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(selectedAnswer.equalsIgnoreCase(chosenState.getCapital())) {
+        if(selectedAnswer != null && chosenState != null &&
+                selectedAnswer.equalsIgnoreCase(chosenState.getCapital())) {
             Log.d("Titanium", "correct");
+        }
+        else {
+            Log.d("Titanium", "selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
         }
     }
 
