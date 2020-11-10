@@ -13,19 +13,28 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.Scanner;
 
+/**
+ * A simple activity used to display the results of the current quiz
+ */
 public class ResultsPageActivity extends AppCompatActivity {
 
+    /**
+     * Creates the activity based on a saved instance state
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results_page);
-
+        //get the quiz score
         int score = (int)getScore();
         String scoreString = score + "%";
+        //get reference to the textview and set text to appropriate score
         TextView scoreText = (TextView)findViewById(R.id.score);
         scoreText.setText(scoreString);
+        //add score to database
         new AddScoreAsyncTask(score).execute();
-
+        //get reference to a button and make it return to main screen
         Button homeButton = (Button)findViewById(R.id.returnButton);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,7 +43,6 @@ public class ResultsPageActivity extends AppCompatActivity {
                 startActivity(goHome);
             }
         });
-
     }
 
     /**
@@ -43,19 +51,17 @@ public class ResultsPageActivity extends AppCompatActivity {
      */
     private double getScore() {
         String fileText;
+        //add total correct answers
         double count = 0.0;
         for(int i = 1; i < 7; i++) {
             try {
+                //read from score files
                 File myFile = new File("/data/user/0/edu.uga.cs.quizzer/files/q" + i + ".ans");
-                Log.d("Titanium", "file found " + i);
                 Scanner myScanner = new Scanner(myFile);
-                Log.d("Titanium", "scanner created " + i);
                 if(myScanner.hasNextLine()) {
-                    Log.d("Titanium", "scanner has next line " + i);
+                    //make score readable
                     String nextLine = myScanner.nextLine();
-                    Log.d("Titanium", "nl:" + nextLine);
                     double answer = Double.parseDouble(nextLine);
-                    Log.d("Titanium", Double.toString(answer));
                     count += answer;
                 }
                 myScanner.close();
