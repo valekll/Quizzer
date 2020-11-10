@@ -67,24 +67,11 @@ public class QuestionCardFragment extends Fragment {
         //Set the card text
         if(chosenState != null) {
 
-            for(int i = 0; i < ((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildCount(); i++) {
-                if(((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i).getId() == R.id.questionNumberTextView) {
-                    questionNumText = (TextView)((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i);
-                }
-                else if(((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i).getId() == R.id.quizQuestionTextView) {
-                    questionText = (TextView)((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i);
-                }
-                else if(((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i).getId() == R.id.radioButton1) {
-                    rb1 = (RadioButton)((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i);
-                }
-                else if(((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i).getId() == R.id.radioButton2) {
-                    rb2 = (RadioButton)((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i);
-                }
-                else if(((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i).getId() == R.id.radioButton3) {
-                    rb3 = (RadioButton)((ConstraintLayout)rootView.findViewById(R.id.questionCardLayout)).getChildAt(i);
-                }
-            }
-
+            questionNumText = (TextView)rootView.findViewById(R.id.questionNumberTextView);
+            questionText = (TextView)rootView.findViewById(R.id.quizQuestionTextView);
+            rb1 = (RadioButton)rootView.findViewById(R.id.radioButton1);
+            rb2 = (RadioButton)rootView.findViewById(R.id.radioButton2);
+            rb3 = (RadioButton)rootView.findViewById(R.id.radioButton3);
             //set values
             questionNumText.setText(questionNumber + ".");
             questionText.setText("What is the capital of " + chosenState.getName());
