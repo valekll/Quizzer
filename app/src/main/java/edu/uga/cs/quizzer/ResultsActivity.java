@@ -19,17 +19,19 @@ public class ResultsActivity extends AppCompatActivity {
 
     protected static DatabaseHelper myDatabaseHelper;
 
+    /**
+     * Creates the activity based on a saved instance state.
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-
         //Get references to xml
         TextView resultsTable = findViewById(R.id.resultsTable);
         TextView resultsTable2 = findViewById(R.id.resultsTable2);
         //Add scores to table
         new GetScoresAsyncTask(this, resultsTable, resultsTable2).execute();
-
     }
 
     /**
