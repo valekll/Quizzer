@@ -2,8 +2,12 @@ package edu.uga.cs.quizzer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.File;
@@ -20,9 +24,23 @@ public class ResultsPageActivity extends AppCompatActivity {
         String scoreString = score + "%";
         TextView scoreText = (TextView)findViewById(R.id.score);
         scoreText.setText(scoreString);
+        new AddScoreAsyncTask(score).execute();
+
+        Button homeButton = (Button)findViewById(R.id.returnButton);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goHome = new Intent(view.getContext(), MainActivity.class);
+                startActivity(goHome);
+            }
+        });
 
     }
 
+    /**
+     * Gets score from files.
+     * @return the score as an int
+     */
     private double getScore() {
         String fileText;
         double count = 0.0;
@@ -47,5 +65,31 @@ public class ResultsPageActivity extends AppCompatActivity {
             }
         }
         return count / 6.0 * 100.0;
+    }
+
+    /**
+     * Async Task to add score to database.
+     */
+    private class AddScoreAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private int score;
+
+        /**
+         * Constructor
+         * @param score score to be added
+         */
+        public AddScoreAsyncTask(int score) {
+            this.score = score;
+        }
+
+        /**
+         * The method to be conducted asynchronously
+         * @return the DatabaseHelper object
+         */
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ScreenSlidePagerActivity.myDatabaseHelper.addResult(score);
+            return null;
+        }
     }
 }

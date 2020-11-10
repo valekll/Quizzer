@@ -14,7 +14,9 @@ import androidx.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -45,6 +47,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_RESULTS_ID = "id";
     private static final String KEY_RESULTS_DATE = "date";
     private static final String KEY_RESULTS_SCORE = "score";
+    /*
     private static final String KEY_RESULTS_Q1 = "question1";
     private static final String KEY_RESULTS_Q1_R = "question1results";
     private static final String KEY_RESULTS_Q2 = "question2";
@@ -57,7 +60,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_RESULTS_Q5_R = "question5results";
     private static final String KEY_RESULTS_Q6 = "question6";
     private static final String KEY_RESULTS_Q6_R = "question6results";
-
+    */
     public static List<List<String>> statesInfo;
 
     /**
@@ -93,8 +96,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 ")";
         String CREATE_RESULTS_TABLE = "CREATE TABLE " + TABLE_RESULTS +
                 "(" + KEY_RESULTS_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                KEY_RESULTS_DATE + " DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
-                KEY_RESULTS_SCORE + " INTEGER NOT NULL," +
+                KEY_RESULTS_DATE + " TEXT NOT NULL," +
+                KEY_RESULTS_SCORE + " INTEGER NOT NULL" +
+                /*
                 KEY_RESULTS_Q1 + " TEXT NOT NULL," +
                 KEY_RESULTS_Q1_R + " INTEGER NOT NULL," +
                 KEY_RESULTS_Q2 + " TEXT NOT NULL," +
@@ -106,7 +110,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 KEY_RESULTS_Q5 + " TEXT NOT NULL," +
                 KEY_RESULTS_Q5_R + " INTEGER NOT NULL," +
                 KEY_RESULTS_Q6 + " TEXT NOT NULL," +
-                KEY_RESULTS_Q6_R + " INTEGER NOT NULL" +
+                KEY_RESULTS_Q6_R + " INTEGER NOT NULL" + */
                 ")";
         //exec command strings to make tables
         sqLiteDatabase.execSQL(CREATE_STATES_TABLE);
@@ -171,7 +175,34 @@ class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+    }
 
+    /**
+     * Add a score to the database
+     * @param score the score
+     */
+    public void addResult(int score) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            db.beginTransaction();
+            //dictionary for the values
+            ContentValues vals = new ContentValues();
+            vals.put(KEY_RESULTS_SCORE, score);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date = sdf.format(new Date());
+            vals.put(KEY_RESULTS_DATE, date);
+            Log.d("Turkey", vals.toString());
+            //insert into the database table
+            long rowNum = db.insertOrThrow(TABLE_RESULTS, null, vals);
+            db.setTransactionSuccessful();
+            Log.d("Turkey", "Row Num: " + rowNum);
+        } catch (Exception e) {
+            Log.d("Turkey", "Exception found adding score to database.");
+            Log.e("Turkey", "e.printStackTrace()", e);
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     /**
