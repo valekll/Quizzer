@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent quizIntent = new Intent(view.getContext(), QuizActivity.class);
+                Intent quizIntent = new Intent(view.getContext(), ScreenSlidePagerActivity.class);
                 MainActivity.this.startActivity(quizIntent);
             }
         });
