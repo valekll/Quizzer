@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -129,14 +131,15 @@ public class QuestionCardFragment extends Fragment {
             Log.d("Titanium", "state: " + chosenState.getName() + " selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
             ans = "0";
         }
+        File path = getContext().getFilesDir();
+        Log.d("Titanium", "path: |" + path.getPath());
+        File file = new File(path, "q" + questionNumber + ".ans");
+
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("q" + questionNumber + ".ans", Context.MODE_PRIVATE));
-            outputStreamWriter.write(ans);
-            outputStreamWriter.close();
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            FileOutputStream str = new FileOutputStream(file);
+            str.write("ans".getBytes());
+            str.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
