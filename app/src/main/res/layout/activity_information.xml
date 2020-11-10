@@ -9,10 +9,9 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="266dp"
-        android:layout_height="183dp"
+        android:layout_width="389dp"
+        android:layout_height="386dp"
         android:fontFamily="@font/audiowide"
-        android:text="How to play the game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
