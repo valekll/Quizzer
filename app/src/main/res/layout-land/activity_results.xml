@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="100dp"
+        android:layout_width="101dp"
         android:layout_height="40dp"
         android:fontFamily="@font/audiowide"
         android:text="Results"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="100dp"
+        android:layout_width="101dp"
         android:layout_height="40dp"
         android:fontFamily="@font/audiowide"
         android:text="Score"
@@ -31,8 +31,42 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.784"
+        app:layout_constraintHorizontal_bias="0.783"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.088" />
+
+    <TextView
+        android:id="@+id/resultsTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/audiowide"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.243"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView1"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="test" />
+
+    <TextView
+        android:id="@+id/resultsTable2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/audiowide"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.628"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView1"
+        app:layout_constraintVertical_bias="0.025"
+        tools:text="test" />
 </androidx.constraintlayout.widget.ConstraintLayout>
