@@ -25,9 +25,10 @@ public class QuestionCardFragment extends Fragment {
     // the fragment initialization parameters
     protected static final String STATE = "state";
     protected static final String QNUM = "questionNumber";
+    public static final String STATE_INDEX = "stateIndex";
 
-    private State chosenStateIndex;
     private State chosenState;
+    private int chosenStateIndex;
     private int questionNumber;
     private TextView questionNumText = null;
     private TextView questionText = null;
@@ -45,6 +46,7 @@ public class QuestionCardFragment extends Fragment {
 
         if (getArguments() != null) {
             questionNumber = getArguments().getInt(QNUM);
+            chosenStateIndex = getArguments().getInt(STATE_INDEX);
         }
     }
 
@@ -101,8 +103,7 @@ public class QuestionCardFragment extends Fragment {
          */
         @Override
         protected State doInBackground(Void... voids) {
-            //return QuizActivity.myDatabaseHelper.getState(QuizActivity.stateIndices[questionNumber - 1]);
-            return QuizActivity.myDatabaseHelper.getState(questionNumber);
+            return QuizActivity.myDatabaseHelper.getState(chosenStateIndex);
         }
 
     }
