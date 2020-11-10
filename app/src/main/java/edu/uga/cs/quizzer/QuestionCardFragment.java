@@ -19,8 +19,6 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link QuestionCardFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class QuestionCardFragment extends Fragment {
 
@@ -67,6 +65,7 @@ public class QuestionCardFragment extends Fragment {
         //Set the card text
         if(chosenState != null) {
 
+            //find the buttons in xml
             questionNumText = (TextView)rootView.findViewById(R.id.questionNumberTextView);
             questionText = (TextView)rootView.findViewById(R.id.quizQuestionTextView);
             rb1 = (RadioButton)rootView.findViewById(R.id.radioButton1);
@@ -102,6 +101,7 @@ public class QuestionCardFragment extends Fragment {
          */
         @Override
         protected State doInBackground(Void... voids) {
+            //return QuizActivity.myDatabaseHelper.getState(QuizActivity.stateIndices[questionNumber - 1]);
             return QuizActivity.myDatabaseHelper.getState(questionNumber);
         }
 

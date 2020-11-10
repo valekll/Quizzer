@@ -41,6 +41,7 @@ public class QuizActivity extends AppCompatActivity {
             int[] stateIndices = generateStateIndices();
 
             questionNumber = 1;
+            int x = stateIndices[0];
             Bundle arguments = new Bundle();
             arguments.putInt(QuestionCardFragment.QNUM, questionNumber);
             Log.d("Turtle", "args put in bundle");
