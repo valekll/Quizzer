@@ -19,11 +19,11 @@ import java.util.Scanner;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private DatabaseHelper myDatabaseHelper;
     private int questionNumber;
-    protected static boolean ready;
+    protected static int[] stateIndices;
     protected static List<State> chosenStates;
     protected static InputStream CSVinputstream;
+    protected static DatabaseHelper myDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +36,9 @@ public class QuizActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             CSVinputstream = getResources().openRawResource(R.raw.state_capitals);
-            ready = false;
+
             new InitDatabaseAsyncTask(this).execute();
-            new StateQueryAsyncTask().execute();
+            int[] stateIndices = generateStateIndices();
 
             questionNumber = 1;
             Bundle arguments = new Bundle();
@@ -110,33 +110,5 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Async Task to make a database query for a state's info.
-     */
-    private class StateQueryAsyncTask extends AsyncTask<Void, Void, Void> {
-        /**
-         * The method to be conducted asynchronously
-         * @return the State object
-         */
-        @Override
-        protected Void doInBackground(Void... voids) {
-            chosenStates = new ArrayList<State>();
-            int[] stateIndices = generateStateIndices();
-            for(int i : stateIndices) {
-                chosenStates.add(myDatabaseHelper.getState(i));
-            }
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            ready = true;
-            /*
-            for(int i = 0; i < chosenStates.size(); i++) {
-                Log.d("Turtle", chosenStates.get(i).toString());
-            }
-             */
-        }
-    }
 }
