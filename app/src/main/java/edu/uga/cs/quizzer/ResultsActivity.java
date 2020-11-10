@@ -12,6 +12,9 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+/**
+ * An activity that displays a table of past scores on the quiz.
+ */
 public class ResultsActivity extends AppCompatActivity {
 
     protected static DatabaseHelper myDatabaseHelper;
@@ -21,8 +24,10 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        //Get references to xml
         TextView resultsTable = findViewById(R.id.resultsTable);
         TextView resultsTable2 = findViewById(R.id.resultsTable2);
+        //Add scores to table
         new GetScoresAsyncTask(this, resultsTable, resultsTable2).execute();
 
     }
@@ -37,6 +42,7 @@ public class ResultsActivity extends AppCompatActivity {
         private TextView resultsTable2;
         private ResultsActivity myResultsActivity;
 
+        //Constructor to get some references
         public GetScoresAsyncTask(ResultsActivity myResultsActivity, TextView resultsTable, TextView resultsTable2) {
             this.myResultsActivity = myResultsActivity;
             myResults = new ArrayList<Result>();
@@ -50,6 +56,7 @@ public class ResultsActivity extends AppCompatActivity {
          */
         @Override
         protected Void doInBackground(Void... voids) {
+            //get a reference to the database helper class
             if(myDatabaseHelper == null) {
                 myDatabaseHelper = DatabaseHelper.getInstance(myResultsActivity);
             }
@@ -57,15 +64,20 @@ public class ResultsActivity extends AppCompatActivity {
             return null;
         }
 
+        /**
+         * Adds everything to the table.
+         */
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            //build strings based on result class
             String resultsString = "";
             String resultsString2 = "";
             for(Result r : myResults) {
                 resultsString += r.getDate() + "\n";
                 resultsString2 += r.getScore() + "\n";
             }
+            //set text
             resultsTable.setText(resultsString);
             resultsTable2.setText(resultsString2);
         }
