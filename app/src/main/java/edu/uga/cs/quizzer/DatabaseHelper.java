@@ -183,7 +183,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         String GET_STATE_QUERY = "SELECT * FROM " + TABLE_STATES + " WHERE " + KEY_STATES_ID + " = " + id;
         SQLiteDatabase myDatabase = getReadableDatabase();
         Cursor myCursor = myDatabase.rawQuery(GET_STATE_QUERY, null);
-        Log.d("Turtle", "Cursor count: " + myCursor.getCount());
+        Log.d("Transformer", "Cursor count: " + myCursor.getCount());
         String[] cols = {KEY_STATES_STATE, KEY_STATES_CAPITAL_CITY, KEY_STATES_SECOND_CITY, KEY_STATES_THIRD_CITY};
         //Cursor myCursor = myDatabase.query(TABLE_STATES, cols, KEY_RESULTS_ID + " = " + id,
         //        null, null, null, null);
@@ -192,7 +192,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
         if(myCursor.moveToFirst()) {
             do {
                 String s = myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE));
-                Log.d("Turtle", "query");
                 myState = new State(
                         myCursor.getString(myCursor.getColumnIndex(KEY_STATES_STATE)),
                         myCursor.getString(myCursor.getColumnIndex(KEY_STATES_CAPITAL_CITY)),
@@ -203,7 +202,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
             } while (myCursor.moveToNext());
         }
         myCursor.close();
-        Log.d("Turtle", "State: \n" + myState);
+        Log.d("Transformer", "State: \n" + myState);
         return myState;
     }
 

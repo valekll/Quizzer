@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link QuestionCardFragment#newInstance} factory method to
@@ -21,8 +24,10 @@ public class QuestionCardFragment extends Fragment {
 
     // the fragment initialization parameters
     protected static final String STATE = "state";
+    protected static final String QNUM = "questionNumber";
 
-    private String chosenState;
+    private State chosenState;
+    private int questionNumber;
     private TextView questionNumText = null;
     private TextView questionText = null;
     private RadioButton rb1 = null;
@@ -33,35 +38,12 @@ public class QuestionCardFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * This method is used to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param chosenState the chosen state.
-     * @return A new instance of fragment QuestionCardFragment.
-     */
-    public static QuestionCardFragment newInstance(String chosenState) {
-        QuestionCardFragment fragment = new QuestionCardFragment();
-        Bundle args = new Bundle();
-        args.putString(STATE, chosenState);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /**
-        for(int i = 0; i < QuizActivity.statesInfo.size(); i++) {
-            for(int j = 0; j < QuizActivity.statesInfo.get(i).size(); j++) {
-                Log.d("Turtle", QuizActivity.statesInfo.get(i).get(j));
-            }
-        }
-         */
-
         if (getArguments() != null) {
-            chosenState = getArguments().getString(STATE);
+            questionNumber = getArguments().getInt(QNUM);
         }
     }
 
@@ -71,6 +53,8 @@ public class QuestionCardFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_question_card, container,
                 false);
+        if (QuizActivity.chosenStates != null)
+            chosenState = QuizActivity.chosenStates.get(questionNumber);
         //Set the card text
         if(chosenState != null) {
 
@@ -93,8 +77,19 @@ public class QuestionCardFragment extends Fragment {
             }
 
             //set values
-            questionNumText.setText(QuizActivity.questionNumber);
-            questionText.setText("What is the capital of " + chosenState);
+            questionNumText.setText(questionNumber);
+            questionText.setText("What is the capital of " + chosenState.getName());
+            Random rand = new Random();
+            int choice1 = rand.nextInt(3);
+            int choice2 = rand.nextInt(2);
+            ArrayList<String> cities = new ArrayList<String>();
+            cities.add(chosenState.getCapital());
+            cities.add(chosenState.getCity1());
+            cities.add(chosenState.getCity2());
+            rb1.setText(cities.remove(choice1));
+            rb2.setText(cities.remove(choice2));
+            rb3.setText(cities.remove(0));
+
         }
 
         return rootView;

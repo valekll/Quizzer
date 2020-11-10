@@ -19,11 +19,10 @@ import java.util.Scanner;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private String chosenState;
-    private int qnum;
-    private int[] stateIndices;
     private DatabaseHelper myDatabaseHelper;
-    public static String questionNumber = "1.";
+    private int questionNumber;
+    protected static boolean ready;
+    protected static List<State> chosenStates;
     protected static InputStream CSVinputstream;
 
     @Override
@@ -37,19 +36,19 @@ public class QuizActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             CSVinputstream = getResources().openRawResource(R.raw.state_capitals);
+            ready = false;
             new InitDatabaseAsyncTask(this).execute();
             new StateQueryAsyncTask().execute();
-            stateIndices = generateStateIndices();
-            chosenState = "Georgia";
-            qnum = 1;
-            questionNumber = qnum + ".";
+
+            questionNumber = 1;
             Bundle arguments = new Bundle();
-            arguments.putString(QuestionCardFragment.STATE, chosenState);
+            arguments.putInt(QuestionCardFragment.QNUM, questionNumber);
+            Log.d("Turtle", "args put in bundle");
+
             QuestionCardFragment fragment = new QuestionCardFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.card_container, fragment)
-                    .commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.card_container, fragment).commit();
+
         }
     }
 
@@ -114,14 +113,30 @@ public class QuizActivity extends AppCompatActivity {
     /**
      * Async Task to make a database query for a state's info.
      */
-    private class StateQueryAsyncTask extends AsyncTask<Void, Void, State> {
+    private class StateQueryAsyncTask extends AsyncTask<Void, Void, Void> {
         /**
          * The method to be conducted asynchronously
          * @return the State object
          */
         @Override
-        protected State doInBackground(Void... voids) {
-            return myDatabaseHelper.getState(4);
+        protected Void doInBackground(Void... voids) {
+            chosenStates = new ArrayList<State>();
+            int[] stateIndices = generateStateIndices();
+            for(int i : stateIndices) {
+                chosenStates.add(myDatabaseHelper.getState(i));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            ready = true;
+            /*
+            for(int i = 0; i < chosenStates.size(); i++) {
+                Log.d("Turtle", chosenStates.get(i).toString());
+            }
+             */
         }
     }
 }

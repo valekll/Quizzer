@@ -1,9 +1,11 @@
 package edu.uga.cs.quizzer;
 
+import java.io.Serializable;
+
 /**
  * A representation of a State.
  */
-public class State {
+public class State implements Serializable {
 
     private String name;
     private String capital;
