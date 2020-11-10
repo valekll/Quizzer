@@ -83,6 +83,9 @@ public class QuestionCardFragment extends Fragment {
             //set values
             questionNumText.setText(questionNumber + ".");
             questionText.setText("What is the capital of " + chosenState.getName() + "?");
+            //initialize answer files
+            writeInitialAnswerToFile();
+            //randomize answer vals
             Random rand = new Random();
             int choice1 = rand.nextInt(3);
             int choice2 = rand.nextInt(2);
@@ -95,6 +98,7 @@ public class QuestionCardFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     selectedAnswer = (String) rb1.getText();
+                    writeAnswerToFile();
                 }
             });
             rb2.setText(cities.remove(choice2));
@@ -102,6 +106,7 @@ public class QuestionCardFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     selectedAnswer = (String) rb2.getText();
+                    writeAnswerToFile();
                 }
             });
             rb3.setText(cities.remove(0));
@@ -109,6 +114,7 @@ public class QuestionCardFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     selectedAnswer = (String) rb3.getText();
+                    writeAnswerToFile();
                 }
             });
 
@@ -120,16 +126,20 @@ public class QuestionCardFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+    }
+
+    private void writeAnswerToFile() {
         String ans = "";
         if(selectedAnswer != null && chosenState != null &&
                 selectedAnswer.equalsIgnoreCase(chosenState.getCapital())) {
             Log.d("Titanium", "state: " + chosenState.getName() + " selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
             Log.d("Titanium", "correct");
-            ans = "1";
+            ans = "1.0";
         }
         else {
             Log.d("Titanium", "state: " + chosenState.getName() + " selected: " + selectedAnswer + " actual: " + chosenState.getCapital());
-            ans = "0";
+            ans = "0.0";
         }
         File path = getContext().getFilesDir();
         Log.d("Titanium", "path: |" + path.getPath());
@@ -137,7 +147,21 @@ public class QuestionCardFragment extends Fragment {
 
         try {
             FileOutputStream str = new FileOutputStream(file);
-            str.write("ans".getBytes());
+            str.write(ans.getBytes());
+            str.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeInitialAnswerToFile() {
+        File path = getContext().getFilesDir();
+        Log.d("Titanium", "path: |" + path.getPath());
+        File file = new File(path, "q" + questionNumber + ".ans");
+
+        try {
+            FileOutputStream str = new FileOutputStream(file);
+            str.write("0.0".getBytes());
             str.close();
         } catch (Exception e) {
             e.printStackTrace();
