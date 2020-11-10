@@ -12,7 +12,6 @@
         <activity android:name=".ScreenSlidePagerActivity"></activity>
         <activity android:name=".InformationActivity"></activity>
         <activity android:name=".ResultsActivity"></activity>
-        <activity android:name=".QuizActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
