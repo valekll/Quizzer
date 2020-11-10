@@ -20,6 +20,16 @@ public class Result {
         this.score = score;
     }
 
+    //toString method
+    @Override
+    public String toString() {
+        return "Result{" +
+                "date='" + date + '\'' +
+                ", Quiz id=" + id +
+                ", score=" + score +
+                '}';
+    }
+
     //getter
     public String getDate() {
         return date;
